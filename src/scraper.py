@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import re
 
 
+
 class WikipediaScraper:
     def __init__(self) -> None:
         """
