@@ -27,7 +27,7 @@ The `WikipediaScraper` class is designed to retrieve leader data from the Countr
    ```python
    scraper = WikipediaScraper()
 
-   
+
 
 ## Installation
 
@@ -39,4 +39,5 @@ The `WikipediaScraper` class is designed to retrieve leader data from the Countr
 
 2. Install the required dependencies:
 
+    ```bash
     pip install -r requirements.txt
