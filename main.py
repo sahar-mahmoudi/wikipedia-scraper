@@ -6,11 +6,10 @@ def main():
     scraper = WikipediaScraper()
 
     # Get the list of supported countries
-    countries = scraper.get_countries()
-    
+    scraper.get_countries()
+
     # Get leaders for each country and populate the leaders_data dictionary
-    for country in countries:
-        scraper.get_leaders(country)
+    scraper.get_leaders()
 
     # Save the data to a JSON file
     scraper.to_json_file("leaders_data.json")
