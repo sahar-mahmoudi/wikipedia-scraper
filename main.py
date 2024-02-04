@@ -11,8 +11,8 @@ def main():
     # Get leaders for each country and populate the leaders_data dictionary
     scraper.get_leaders()
 
-    # Save the data to a JSON file
-    scraper.to_json_file("leaders_data.json")
+    # Save the data to a JSON file or CSV file (default = JSON)
+    scraper.export(filename='leaders_data', file_format='csv')
 
 
 if __name__ == "__main__":

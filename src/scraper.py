@@ -1,5 +1,6 @@
 import re
 import json
+import csv
 import requests
 from bs4 import BeautifulSoup
 
@@ -56,8 +57,8 @@ class WikipediaScraper:
     get_first_paragraph(wikipedia_url)
         Retrieves the first paragraph of details about a leader from their Wikipedia page.
 
-    to_json_file(filepath)
-        Stores the data structure into a JSON file.
+    export(filename, file_format="json")
+        Stores the data structure into a JSON file or CSV file.
     """
 
         # Initialize the WikipediaScraper object with necessary attributes
@@ -179,18 +180,46 @@ class WikipediaScraper:
 
         # Return an empty string if no suitable paragraph is found
         return ""
-
-    def to_json_file(self, filepath: str) -> None:
+    
+    def export(self, filename, file_format="json") -> None:
         """
-        Store the data structure into a JSON file.
+         Store the data structure into a json file or csv file.
 
-        Parameters
-        ----------
-        filepath : str
-            The path to the JSON file.
+         Parameters
+         ----------
+         filename : str
+             The name to the json file or csv file.
+    
+         file_format : str
+             The format of the output file ('json' or 'csv'). Default is 'json'.
+
         """
-        
-        with open(filepath, 'w', encoding="utf-8") as file:
-            json.dump(self.leaders_data, file, indent=2, ensure_ascii=False)
+         
+        # Export as JSON
+        if file_format == "json":
+            with open(filename + '.json', 'w', encoding="utf-8") as file:
+                json.dump(self.leaders_data, file, indent=2, ensure_ascii=False)
+        # Export as CSV        
+        elif file_format == "csv":
+            with open(filename + '.csv', 'w', newline='', encoding='utf-8') as csv_file:
+                csv_writer = csv.writer(csv_file)
+
+                # Write the header
+                header = ["Country", "First Name", "Last Name", "ID", "Birth Date", "Death Date",
+                          "Place of Birth", "Start Mandate", "End Mandate", "URL", "First Paragraph"]
+                csv_writer.writerow(header)
+
+                # Write the data rows
+                for country, leaders in self.leaders_data.items():
+                    # Prepare a row for each leader
+                    for leader in leaders:
+                        row = [country, leader["first_name"], leader["last_name"], leader["id"],
+                               leader["birth_date"], leader["death_date"], leader["place_of_birth"],
+                               leader["start_mandate"], leader["end_mandate"], leader["url"],
+                               leader["first_paragraph"]]
+                        # Write the row to the CSV file
+                        csv_writer.writerow(row)
+
+   
 
 
