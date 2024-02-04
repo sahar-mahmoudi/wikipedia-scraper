@@ -6,7 +6,7 @@ A Python library for scraping leader data from the Country Leaders API and retri
 
 ## Introduction
 
-The `WikipediaScraper` class is designed to retrieve leader data from the Country Leaders API and gather additional details from the Wikipedia pages of each leader. It provides methods to refresh the API cookie, get a list of supported countries, fetch leaders for a specific country, clean paragraphs, retrieve the first paragraph from Wikipedia, and store the data structure into a JSON file.
+The `WikipediaScraper` class is designed to retrieve leader data from the Country Leaders API and gather additional details from the Wikipedia pages of each leader. It provides methods to refresh the API cookie, get a list of supported countries, fetch leaders for a specific country, clean paragraphs, retrieve the first paragraph from Wikipedia, and store the data structure into a JSON or CSV file.
 
 
 ## Features
@@ -17,7 +17,7 @@ The `WikipediaScraper` class is designed to retrieve leader data from the Countr
 
 - **Data Cleaning:** Implements a method to clean specific patterns from the scraped text.
 
-- **Data Storage:** Stores the scraped leader data in a JSON file.
+- **Data Storage:** Stores the scraped leader data in a JSON or CSV file.
 
 
 ## Usage
@@ -34,8 +34,8 @@ The `WikipediaScraper` class is designed to retrieve leader data from the Countr
     # Get leaders for each country and populate the leaders_data dictionary
     scraper.get_leaders()
 
-    # Save the data to a JSON file
-    scraper.to_json_file("leaders_data.json")
+    # Save the data to a JSON file or CSV file (default = JSON)
+    scraper.export(filename='leaders_data', file_format='csv')
     
 
 
