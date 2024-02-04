@@ -1,7 +1,7 @@
 
 # Wikipedia Scraper for Country Leaders
 
-A Python class for scraping leader data from the Country Leaders API and retrieving information from Wikipedia pages.
+A Python library for scraping leader data from the Country Leaders API and retrieving information from Wikipedia pages.
 
 
 ## Introduction
@@ -25,7 +25,18 @@ The `WikipediaScraper` class is designed to retrieve leader data from the Countr
 1. **Initialize WikipediaScraper:**
 
    ```python
-   scraper = WikipediaScraper()
+   # Create an instance of the WikipediaScraper
+    scraper = WikipediaScraper()
+
+    # Get the list of supported countries
+    scraper.get_countries()
+
+    # Get leaders for each country and populate the leaders_data dictionary
+    scraper.get_leaders()
+
+    # Save the data to a JSON file
+    scraper.to_json_file("leaders_data.json")
+    
 
 
 
@@ -35,7 +46,7 @@ The `WikipediaScraper` class is designed to retrieve leader data from the Countr
 
    ```bash
    git clone git@github.com:sahar-mahmoudi/wikipedia-scraper.git
-   cd your-repository
+   cd wikipedia-scraper
 
 2. Install the required dependencies:
 
