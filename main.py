@@ -13,7 +13,7 @@ def main():
 
     # Save the data to a JSON file
     scraper.to_json_file("leaders_data.json")
-    
-    
+
+
 if __name__ == "__main__":
     main()

@@ -1,12 +1,12 @@
-import requests
-import json
-from bs4 import BeautifulSoup
 import re
+import json
+import requests
+from bs4 import BeautifulSoup
 
 
 class WikipediaScraper:
     """A class for scraping leader data from the Country Leaders API"""
-    
+
     def __init__(self) -> None:
         """
     Parameters
@@ -59,9 +59,8 @@ class WikipediaScraper:
     to_json_file(filepath)
         Stores the data structure into a JSON file.
     """
-        
+
         # Initialize the WikipediaScraper object with necessary attributes
-        
         self.root_url = "https://country-leaders.onrender.com"
         self.country_endpoint = "/countries"
         self.leaders_endpoint = "/leaders"
@@ -81,7 +80,8 @@ class WikipediaScraper:
             self.cookie = response.cookies
         except requests.exceptions.RequestException as e:
             print(f"Error refreshing cookie: {e}")
-            self.cookie = None  # Set to None to handle the error appropriately in your code
+            # Set to None to handle the error appropriately in your code
+            self.cookie = None
 
     def get_countries(self):
         """
@@ -92,13 +92,12 @@ class WikipediaScraper:
         self.refresh_cookie()
         response = self.session.get(self.root_url + self.country_endpoint)
         self.countries = response.json()
-        
+
     def get_leaders(self) -> None:
         """
-        Retrieve the leaders of a specific country from the API and populate the leaders_data object.
-        
+        Retrieve the leaders of a specific country from the API
+        and populate the leaders_data object.
         """
-        
         for country in self.countries:
             # Refresh the cookie before scraping each country
             self.refresh_cookie()
@@ -107,7 +106,7 @@ class WikipediaScraper:
             all_leaders = response.json()
 
             self.leaders_data[country] = [
-                {  
+                {
                     "first_name": leader["first_name"],
                     "last_name": leader["last_name"],
                     "id": leader["id"],
@@ -136,14 +135,18 @@ class WikipediaScraper:
             The cleaned first paragraph.
         """
 
-        patterns = [r'\[[\d \w\.]+\]', r"(\[|\/).+(\/|\])(.*;)?", r"\n", r"\(?\w+ⓘ ?\)?", r'\(? ?Écouter\)? ?']
+        patterns = [
+            r'\[[\d \w\.]+\]',
+            r"(\[|\/).+(\/|\])(.*;)?",
+            r"\n", r"\(?\w+ⓘ ?\)?",
+            r'\(? ?Écouter\)? ?'
+            ]
         cleaned_text = first_paragraph
         for pattern in patterns:
             cleaned_text = re.sub(pattern, '', cleaned_text)
-             
         return cleaned_text
 
-    def get_first_paragraph(self, wikipedia_url: str) -> str: 
+    def get_first_paragraph(self, wikipedia_url: str) -> str:
         """
         Get the first paragraph from their Wikipedia page.
 
@@ -157,8 +160,7 @@ class WikipediaScraper:
         str
             The cleaned first paragraph.
         """
-    
-        response = self.session.get(wikipedia_url) 
+        response = self.session.get(wikipedia_url)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Find the specific div with the given id
