@@ -4,12 +4,11 @@ from bs4 import BeautifulSoup
 import re
 
 
-
 class WikipediaScraper:
+    """A class for scraping leader data from the Country Leaders API"""
+    
     def __init__(self) -> None:
         """
-    A class for scraping leader data from the Country Leaders API
-
     Parameters
     ----------
     None
@@ -91,8 +90,6 @@ class WikipediaScraper:
         """
         # Refresh the cookie before scraping each country
         self.refresh_cookie()
-        
-        
         response = self.session.get(self.root_url + self.country_endpoint)
         return response.json()
 
@@ -105,16 +102,15 @@ class WikipediaScraper:
         country : str
             The name of the country.
         """
-           # Refresh the cookie before scraping each country
+        # Refresh the cookie before scraping each country
         self.refresh_cookie()
-        
-        
         endpoint = f"{self.leaders_endpoint}?country={country}"
         response = self.session.get(self.root_url + endpoint)
         all_leaders = response.json()
 
         self.leaders_data[country] = [
-            {   "first_name": leader["first_name"],
+            {  
+                "first_name": leader["first_name"],
                 "last_name": leader["last_name"],
                 "id": leader["id"],
                 "birth_date": leader["birth_date"],
@@ -127,7 +123,7 @@ class WikipediaScraper:
             } for leader in all_leaders
         ]
 
-    def clean_paragraph(self, first_paragraph : str) -> str:
+    def clean_paragraph(self, first_paragraph: str) -> str:
         """
         Clean the first paragraph by removing specific patterns.
 
@@ -141,14 +137,17 @@ class WikipediaScraper:
         str
             The cleaned first paragraph.
         """
-        pattern = r'\([^)]*uitspraakⓘ[^)]*\)|\[\d+\]|\n' + f'|{r"//w+?;"}'
-        cleaned_text = re.sub(pattern, '', first_paragraph)
+
+        patterns = [r'\[[\d \w\.]+\]', r"(\[|\/).+(\/|\])(.*;)?", r"\n", r"\(?\w+ⓘ ?\)?", r'\(? ?Écouter\)? ?']
+        cleaned_text = first_paragraph
+        for pattern in patterns:
+            cleaned_text = re.sub(pattern, '', cleaned_text)
+             
         return cleaned_text
 
-    def get_first_paragraph(self, wikipedia_url: str) -> str:
-        
+    def get_first_paragraph(self, wikipedia_url: str) -> str: 
             """
-            Get the first paragraph of details about a leader from their Wikipedia page.
+            Get the first paragraph from their Wikipedia page.
 
             Parameters
             ----------
@@ -161,7 +160,7 @@ class WikipediaScraper:
                 The cleaned first paragraph.
             """
         
-            response = self.session.get(wikipedia_url)
+            response = self.session.get(wikipedia_url) 
             soup = BeautifulSoup(response.text, 'html.parser')
 
             # Find the specific div with the given id
@@ -172,7 +171,7 @@ class WikipediaScraper:
 
             # Iterate over each paragraph
             for paragraph in paragraphs:
-                # Check if the paragraph starts with a bold word and has a length greater than 15
+                # Check if the paragraph starts with a bold word and length greater than 15
                 if paragraph.find("b") and len(paragraph.get_text()) > 15:
                     # Return the cleaned text or the original text
                     cleaned_text = self.clean_paragraph(paragraph.get_text())
@@ -180,8 +179,6 @@ class WikipediaScraper:
 
             # Return an empty string if no suitable paragraph is found
             return ""
-
-   
 
     def to_json_file(self, filepath: str) -> None:
         """
@@ -193,8 +190,7 @@ class WikipediaScraper:
             The path to the JSON file.
         """
         
-        
-        with open(filepath, 'w',encoding= "utf-8") as file:
-            json.dump(self.leaders_data, file, indent=2,ensure_ascii=False)
+        with open(filepath, 'w', encoding="utf-8") as file:
+            json.dump(self.leaders_data, file, indent=2, ensure_ascii=False)
 
 
